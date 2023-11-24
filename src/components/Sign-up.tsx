@@ -60,7 +60,7 @@ export default function SignUp() {
       try {
         const data = { email, password, username };
         await axios
-          .post("http://localhost:8080/signup", data).then((response: any) => {
+          .post("http://192.168.0.5:8080/signup", data).then((response: any) => {
             console.log("repsonse del signup: ", response);
         setError("1")
 

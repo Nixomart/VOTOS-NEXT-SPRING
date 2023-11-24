@@ -24,7 +24,7 @@ const fetchUser = async ()=>{
     const token = window.localStorage.getItem("token")
     if (token) {
       axios
-      .post("http://localhost:8080/auth/login", data)
+      .post("http://192.168.0.5:8080/auth/login", data)
       .then((response: any) => {
         console.log("responseee: ", response.data.message);
         if (response.data.message !== "sucess") {
@@ -47,7 +47,7 @@ fetchUser()
         const token = window.localStorage.getItem("token");
         if (usuario === null) {
           const response = await axios.get(
-            "http://localhost:8080/votacion/candidatos"
+            "http://192.168.0.5:8080/votacion/candidatos"
           );
           const data = response.data.payload;
           console.log(data);
@@ -56,7 +56,7 @@ fetchUser()
           setCarga(true);
         } else {
           const response = await axios.get(
-            "http://localhost:8080/votacion/candidatosAuth",
+            "http://192.168.0.5:8080/votacion/candidatosAuth",
             {
               headers: {
                 Authorization: `Bearer ${token}`,

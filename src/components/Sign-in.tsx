@@ -17,7 +17,7 @@ export default function SignIn() {
     const msg = await signInWithPassword(email, password);
     const data = { email, password };
     axios
-      .post("http://localhost:8080/auth/login", data)
+      .post("http://192.168.0.5:8080/auth/login", data)
       .then((response: any) => {
         console.log("responseee: ", response.data.message);
         

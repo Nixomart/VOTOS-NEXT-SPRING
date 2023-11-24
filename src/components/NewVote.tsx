@@ -41,7 +41,7 @@ export default function NewVote({index, idCandidato}:any) {
       const data={idCandidato}
       console.log("data antes de votar: ", data);
       const token = window.localStorage.getItem("token")
-      axios.post('http://localhost:8080/votacion/votar', data ,{
+      axios.post('http://192.168.0.5:8080/votacion/votar', data ,{
         headers: {
           'Authorization': `Bearer ${token}`
         },
