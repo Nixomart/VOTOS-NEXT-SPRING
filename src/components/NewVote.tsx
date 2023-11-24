@@ -4,7 +4,8 @@ import {  doc, increment, updateDoc } from "firebase/firestore";
 import { useDataContext } from "@/context/DataGlobal";
 import { useUserContext } from "@/context/UserContext";
 import { db } from "@/firebase/firebase";
-export default function NewVote({index}:any) {
+import axios from "axios";
+export default function NewVote({index, idCandidato}:any) {
   const [openModal, setOpenModal] = useState<string | undefined>();
   const props = { openModal, setOpenModal };
   const [rangeValue, setRangeValue] = useState(500); // Establece un valor inicial
@@ -35,59 +36,29 @@ export default function NewVote({index}:any) {
     }
   };
   const submit = () => {
-    if (pay) {
-      if (rangeValue > data.points) {
-        setError(true);
+    
+    try {
+      const data={idCandidato}
+      console.log("data antes de votar: ", data);
+      const token = window.localStorage.getItem("token")
+      axios.post('http://localhost:8080/votacion/votar', data ,{
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
+      }).then((response:any)=>{
+        console.log(response);
         setLog(false)
-      } else {
-        console.log("vote con range: ", rangeValue);
-        try {
-          props.setOpenModal(undefined);
-
-          const docRef = doc(db, 'votes', 'president')
-          updateDoc(docRef,{
-            [`${index}.votes`]: increment(rangeValue),
-          })
-
-          const docRefU = doc(db, 'users', usuario.uid)
-          updateDoc(docRefU,{
-            points: increment(-rangeValue),
-          }).then(()=>{
-/*             setData((prevState:any)=>({...prevState, points: prevState.points - rangeValue}))
- */            setLog(false)
-              })
-           } catch (error) {
-          
-        }
-      }
-    } else {
-      if (input == 0 || Number.isNaN(input)) {
-        setError(true);
-        setLog(false)
-      } else {
-        try {
-          props.setOpenModal(undefined);
-          const docRef = doc(db, 'votes', 'president')
-          updateDoc(docRef, {
-            [`${index}.votes`]: increment(input),
-          })
-          const docRefU = doc(db, 'users', usuario.uid)
-          updateDoc(docRefU, {
-            points: increment(-input),
-          }).then(() => {
-            setLog(false);
-         
-          });
-           } catch (error) {
-          
-        }
-      }
+      })
+    } catch (error) {
+      console.log("error al votar; ",error);
+      
     }
+    console.log("id: ", idCandidato);
   };
 
   return (
     <>
-      <Button onClick={() => props.setOpenModal("default")}>Votar</Button>
+      <Button disabled={usuario !== null && usuario.voto} onClick={() => props.setOpenModal("default")}>Votar</Button>
       <Modal
         dismissible
         show={props.openModal === "default"}

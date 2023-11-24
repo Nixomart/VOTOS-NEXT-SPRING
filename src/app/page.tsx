@@ -9,18 +9,80 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { doc, getDoc, onSnapshot } from "firebase/firestore";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-
+import axios from "axios";
 export default function Home() {
   const { data, setData } = useDataContext();
-  console.log(data);
-
   const { setUsuario } = useUserContext();
   const auth = getAuth(firebaseApp);
   const { usuario } = useUserContext();
   const [topVote, setTopVote] = useState(null);
   const [carga, setCarga] = useState(false);
   const [candidates, setCandidates] = useState<any>([]);
+  /* useEffect(()=>{
+const fetchUser = async ()=>{
+  try {
+    const token = window.localStorage.getItem("token")
+    if (token) {
+      axios
+      .post("http://localhost:8080/auth/login", data)
+      .then((response: any) => {
+        console.log("responseee: ", response.data.message);
+        if (response.data.message !== "sucess") {
+        } else {
+          window.localStorage.setItem("token", response.data.payload.token);
+          setUsuario(response.data.payload);
+        }
+      });  
+    }
+    
+  } catch (error) {
+    
+  }
+}
+fetchUser()
+},[]) */
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const token = window.localStorage.getItem("token");
+        if (usuario === null) {
+          const response = await axios.get(
+            "http://localhost:8080/votacion/candidatos"
+          );
+          const data = response.data.payload;
+          console.log(data);
+          setData(data);
+          setCandidates(data)
+          setCarga(true);
+        } else {
+          const response = await axios.get(
+            "http://localhost:8080/votacion/candidatosAuth",
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+          const data = response.data.payload;
+          const votesData = response.data.payload;
+          // Ordenar el arreglo de candidatos por votos (opcional)
+          const sortedCandidates = votesData.sort(
+            (a: any, b: any) => b.votos - a.votos
+          );
+          setData(sortedCandidates)
+          setCandidates(sortedCandidates);
+          setTopVote(sortedCandidates[0]);
+          setCarga(true);
+        }
+      } catch (error) {
+        console.error("Error al obtener datos:", error);
+      }
+    };
+
+    fetchData();
+  }, [usuario]);
+
+  /*  useEffect(() => {
     const fetchCandidates = async () => {
       const votesDocRef = doc(db, "votes", "president");
       const votesDocSnap = await getDoc(votesDocRef);
@@ -90,7 +152,7 @@ export default function Home() {
     return () => {
       unsubscribe();
     };
-  }, [usuario]);
+  }, [usuario]); */
 
   return carga === false ? (
     <Loading />
@@ -105,9 +167,10 @@ export default function Home() {
         {candidates.map((vote: any, index: number) => (
           <Vote
             key={index}
+            idCandidato={vote.id}
             name={vote.name}
-            photo={vote.photo}
-            votes={vote.votes}
+            photo={vote.imagen}
+            votes={vote.votos}
             index={vote.name}
             isTop={vote === topVote}
           />

@@ -15,9 +15,10 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { LiaEyeSlash, LiaEyeSolid } from "react-icons/lia";
 import firebaseApp, { db } from "@/firebase/firebase";
 import signupWithLinkPass from "@/firebase/fuctions/SignUp";
+import axios from "axios";
 export default function SignUp() {
-    const {  setUsuario } = useUserContext();
-   const [openModal, setOpenModal] = useState<string | undefined>();
+  const { setUsuario } = useUserContext();
+  const [openModal, setOpenModal] = useState<string | undefined>();
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -52,42 +53,21 @@ export default function SignUp() {
   const specialCharactersRegex = /[%$'¡!?¿{}#+=*:;,.@<>"´´¨¨¨ ~()\/\s]/;
 
   const handleSignup = async () => {
-    const result = await finUser();
     if (specialCharactersRegex.test(username)) {
       setError("El nombre de usuario no puede incluir signos.");
       setLog(false);
     } else {
-      if (result == false) {
-        try {
-          const result = await signupWithLinkPass(email, password);
-          if (result.success) {
-            setError("Correo de verificacion enviado!");
-               onAuthStateChanged(auth, (usuarioFirebase) => {
-              if (usuarioFirebase) {
-                setUsuario(usuarioFirebase);
-                const userDocRef = doc(db, "users", usuarioFirebase.uid);
-                setDoc(userDocRef, {
-                    username: username,
-                    points: 200
-                }).then(() => {
-                  setLog(false)
-                  props.setOpenModal(undefined)
-                  ;
-                });
-              } else {
-                setUsuario(null);
-              }
-            });
-          } else {
-            setError('Hubo un error: la contraseña debe ser mayor a 6 o El email es invalido.');
-            setLog(false);
-          }
-        } catch (error) {
-          console.log("ERROR EN REGISTRO");
-        }
-      } else {
-        setLog(false);
-        setError("este nombre ya esta en uso");
+      try {
+        const data = { email, password, username };
+        await axios
+          .post("http://localhost:8080/signup", data).then((response: any) => {
+            console.log("repsonse del signup: ", response);
+        setError("1")
+
+          });
+      } catch (error) {
+        console.log("ERROR EN REGISTRO", error);
+        setError("Hubo un error en tu registro")
       }
     }
   };
@@ -126,8 +106,7 @@ export default function SignUp() {
               id="helper-text-explanation"
               className="mt-2 text-sm text-gray-500 dark:text-gray-400"
             >
-              We’ll never share your details
-              .
+              We’ll never share your details .
             </p>
             <label
               htmlFor="helper-text"
@@ -144,13 +123,23 @@ export default function SignUp() {
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               />
               {view === false ? (
-             <button className="text-gray-500" onClick={()=>{setView(true)}}>
+                <button
+                  className="text-gray-500"
+                  onClick={() => {
+                    setView(true);
+                  }}
+                >
                   {" "}
                   <LiaEyeSolid className="text-3xl" />
                 </button>
               ) : (
-             <button className="text-gray-500" onClick={()=>{setView(false)}}>
-                  <LiaEyeSlash  className="text-3xl"/>
+                <button
+                  className="text-gray-500"
+                  onClick={() => {
+                    setView(false);
+                  }}
+                >
+                  <LiaEyeSlash className="text-3xl" />
                 </button>
               )}
             </div>
@@ -171,12 +160,12 @@ export default function SignUp() {
             />
           </div>
         </Modal.Body>
-        {error != '' && <p className="text-red-600 text-center">{error}</p>}
+        {error == "1" ? <p className="text-green-600 text-center">Se registro, puedes loguearte</p>: <p className="text-red-600 text-center">{error}</p>}
         <Modal.Footer>
           <Button
             disabled={log}
             onClick={() => {
-              setLog(true), handleSignup();
+              setLog(false), handleSignup();
             }}
           >
             {log ? (

@@ -1,4 +1,6 @@
+import { useUserContext } from "@/context/UserContext";
 import signInWithPassword from "@/firebase/fuctions/SignIn";
+import axios from "axios";
 import { Button, Modal } from "flowbite-react";
 import { useState } from "react";
 
@@ -6,21 +8,29 @@ import { ImSpinner2 } from "react-icons/im";
 export default function SignIn() {
   const [openModal, setOpenModal] = useState<string | undefined>();
   const [email, setEmail] = useState("");
+  const { usuario, setUsuario } = useUserContext();
   const [password, setPassword] = useState("");
   const [err, setErr] = useState("");
   const [log, setLog] = useState(false);
   const props = { openModal, setOpenModal };
   const sumbitLogin = async () => {
     const msg = await signInWithPassword(email, password);
-    console.log("msg: ", msg);
-    if (msg == '0') {
-      setErr('hubo un error en el inicio de sesion.');
-      setLog(false);
-    }else{
-      props.setOpenModal(undefined);
-      setLog(true);
-    }
-   
+    const data = { email, password };
+    axios
+      .post("http://localhost:8080/auth/login", data)
+      .then((response: any) => {
+        console.log("responseee: ", response.data.message);
+        
+        if (response.data.message !== "sucess") {
+          setErr("hubo un error en el inicio de sesion.");
+          setLog(false);
+        } else {
+          props.setOpenModal(undefined);
+          window.localStorage.setItem("token", response.data.payload.token);
+          setUsuario(response.data.payload);
+          setLog(true);
+        }
+      });
   };
   return (
     <>
@@ -69,7 +79,7 @@ export default function SignIn() {
             />
           </div>
         </Modal.Body>
-          {err != '' && <p className="text-red-600 text-center">{err}</p>}
+        {err != "" && <p className="text-red-600 text-center">{err}</p>}
         <Modal.Footer>
           <Button
             /*                         disabled={error || input == 0 || Number.isNaN(input)}

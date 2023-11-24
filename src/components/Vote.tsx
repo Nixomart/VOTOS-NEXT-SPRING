@@ -1,6 +1,6 @@
 import NewVote from "./NewVote";
 
-export default function Vote({ name, photo, votes, isTop, index }: any) {
+export default function Vote({idCandidato, name, photo, votes, isTop, index }: any) {
   const voteClasses = `max-w-sm w-full sm: h-max mx-auto p-6 bg-white sm:col-span-1 border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 
   ${isTop ? " col-span-3" : " col-span-1"}`;
   return (
@@ -11,7 +11,7 @@ export default function Vote({ name, photo, votes, isTop, index }: any) {
         </h5>
         <div className="flex">
           <span className="dark:text-white text-gray-800 font-bold">Votos: </span>
-          <p className="dark:text-white text-gray-800 font-thin">{votes}</p>
+          <p className="dark:text-white text-gray-800 font-thin">{votes == null ? 'Logueate para ver los vtos: ': votes}</p>
         </div>
       </div>
       <img
@@ -19,7 +19,7 @@ export default function Vote({ name, photo, votes, isTop, index }: any) {
         alt="1231234sdw"
         className={` ${isTop ? "w-full" : "w-60"} mx-auto`}
       />
-      <NewVote index={index} />
+      <NewVote idCandidato={idCandidato} index={index} />
     </div>
   );
 }
