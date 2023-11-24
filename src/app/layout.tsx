@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
+import { DataProvider } from '@/context/DataGlobal'
+import { UserContextProvider } from '@/context/UserContext'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -15,8 +17,16 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
+<UserContextProvider>
+    <DataProvider>
+
     <html lang="en">
+      <head>
+      <script src="../path/to/flowbite/dist/flowbite.min.js"></script>
+      </head>
       <body className={inter.className}>{children}</body>
     </html>
+    </DataProvider>
+</UserContextProvider>
   )
 }
