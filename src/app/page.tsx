@@ -99,7 +99,7 @@ export default function Home() {
       <Nav />
       {/* title! */}
       <h1 className="text-center text-gray-700 font-semibold text-4xl py-5 mb-5 bg-slate-300 ">
-        ¿Quien sera presidente??
+        ¿Quien sera presidente?
       </h1>
       <section className="grid grid-cols-3 sm:grid-cols-1 gap-y-3 ">
         {candidates.map((vote: any, index: number) => (
