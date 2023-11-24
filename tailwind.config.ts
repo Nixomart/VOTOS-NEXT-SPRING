@@ -1,12 +1,15 @@
 import type { Config } from "tailwindcss";
-
+/**
+ * @type {import('@types/tailwindcss/tailwind-config').TailwindConfig}
+ */
 const config: Config = {
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
     "./node_modules/flowbite/**/*.js",
-    "./src/**/*.{ts,tsx,js,jsx}"
+    "./src/**/*.{ts,tsx,js,jsx}",
+    './node_modules/flowbite-react/**/*.js', './pages/**/*.{ts,tsx}', './public/**/*.html'
   ],
   theme: {
     extend: {
