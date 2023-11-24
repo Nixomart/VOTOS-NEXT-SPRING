@@ -35,7 +35,7 @@ export default function Nav() {
   return (
     <nav className="bg-white border-gray-200 dark:bg-gray-900">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-        <h1 className="text-2xl font-bold uppercase dark:text-gray-300">Quien Gana? Nicolass</h1>
+        <h1 className="text-2xl font-bold uppercase dark:text-gray-300">Quien Gana? Nicolass mm</h1>
         {
         usuario == null ? <p>Ingresa para poder votar</p> :  
         
