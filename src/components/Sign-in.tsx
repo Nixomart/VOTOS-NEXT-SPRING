@@ -19,8 +19,6 @@ export default function SignIn() {
     axios
       .post("http://192.168.0.5:8080/auth/login", data)
       .then((response: any) => {
-        console.log("responseee: ", response.data.message);
-        
         if (response.data.message !== "sucess") {
           setErr("hubo un error en el inicio de sesion.");
           setLog(false);

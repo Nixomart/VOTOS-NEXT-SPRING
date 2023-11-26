@@ -1,9 +1,7 @@
 import { Button, Modal } from "flowbite-react";
 import { useState } from "react";
-import {  doc, increment, updateDoc } from "firebase/firestore";
 import { useDataContext } from "@/context/DataGlobal";
 import { useUserContext } from "@/context/UserContext";
-import { db } from "@/firebase/firebase";
 import axios from "axios";
 export default function NewVote({index, idCandidato}:any) {
   const [openModal, setOpenModal] = useState<string | undefined>();

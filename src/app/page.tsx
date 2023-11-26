@@ -24,7 +24,7 @@ const fetchUser = async ()=>{
     const token = window.localStorage.getItem("token")
     if (token) {
       axios
-      .post("http://192.168.0.5:8080/auth/login", data)
+      .post("http://localhost:8080/auth/login", data)
       .then((response: any) => {
         console.log("responseee: ", response.data.message);
         if (response.data.message !== "sucess") {
