@@ -1,11 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
 :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
+}
+h1, p, label,h5,button {
+  font-family: 'Outfit', sans-serif;;
 }
 
 @media (prefers-color-scheme: dark) {

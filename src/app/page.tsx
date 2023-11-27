@@ -45,6 +45,8 @@ fetchUser()
     const fetchData = async () => {
       try {
         const token = window.localStorage.getItem("token");
+        console.log("HAY SUARUIO?: ", usuario);
+        
         if (usuario === null) {
           const response = await axios.get(
             "http://192.168.0.5:8080/votacion/candidatos"
@@ -55,11 +57,13 @@ fetchUser()
           setCandidates(data)
           setCarga(true);
         } else {
+          console.log("ISUARIOO TOKEN: ", usuario.token);
+          
           const response = await axios.get(
             "http://192.168.0.5:8080/votacion/candidatosAuth",
             {
               headers: {
-                Authorization: `Bearer ${token}`,
+                Authorization: `Bearer ${usuario.token}`,
               },
             }
           );
@@ -82,88 +86,16 @@ fetchUser()
     fetchData();
   }, [usuario]);
 
-  /*  useEffect(() => {
-    const fetchCandidates = async () => {
-      const votesDocRef = doc(db, "votes", "president");
-      const votesDocSnap = await getDoc(votesDocRef);
-      if (votesDocSnap.exists()) {
-        const unsubscribe = onSnapshot(votesDocRef, (snapshot) => {
-          const votesData = snapshot.data();
-          const candidatesArray = [];
-
-          // Convertir los campos de candidatos en un arreglo de objetos
-          for (const candidateId in votesData) {
-            if (candidateId !== "metadata") {
-              // Omitir campos especiales de Firestore
-              candidatesArray.push(votesData[candidateId]);
-            }
-          }
-
-          // Ordenar el arreglo de candidatos por votos (opcional)
-          const sortedCandidates = candidatesArray.sort(
-            (a, b) => b.votes - a.votes
-          );
-
-          setCandidates(sortedCandidates);
-          setTopVote(sortedCandidates[0]);
-          setCarga(true);
-        });
-
-        return () => {
-          unsubscribe();
-        };
-      }
-    };
-
-    fetchCandidates();
-  }, []);
-
-  useEffect(() => {}, [candidates]);
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (usuarioFirebase) => {
-      if (data === null || data === undefined) {
-        if (usuarioFirebase) {
-          setUsuario(usuarioFirebase);
-
-          const docRef = doc(db, "users", usuarioFirebase.uid);
-          const docSnap = await getDoc(docRef);
-          if (docSnap.exists()) {
-            console.log("data: ", docSnap.data());
-            setData(docSnap.data());
-          }
-        }
-      }
-    });
-
-    if (usuario) {
-      const docRef = doc(db, "users", usuario.uid);
-      const unsubscribeData = onSnapshot(docRef, (snapshot) => {
-        const userdata = snapshot.data();
-        setData(userdata);
-      });
-
-      return () => {
-        unsubscribe();
-        unsubscribeData();
-      };
-    }
-
-    return () => {
-      unsubscribe();
-    };
-  }, [usuario]); */
-
   return carga === false ? (
     <Loading />
   ) : (
-    <div className="bg-slate-300">
+    <div className="bg-gray-50 h-screen sm:h-auto transition-all duration-300 dark:bg-slate-700">
       <Nav />
       {/* title! */}
-      <h1 className="text-center text-gray-700 font-semibold text-4xl py-5 mb-5 bg-slate-300 ">
-        ¿Quien sera presidente???
+      <h1 className="text-center font-extrabold dark:text-white text-gray-700 text-4xl py-5 border-b border-gray-500 ">
+        ¿Quien sera el proximo presidente?
       </h1>
-      <section className="grid grid-cols-3 sm:grid-cols-1 gap-y-3 ">
+      <section className="grid grid-cols-4 sm:grid-cols-1 ">
         {candidates.map((vote: any, index: number) => (
           <Vote
             key={index}

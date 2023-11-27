@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
-import PayPoint from "./PayPoint";
 import SignIn from "./Sign-in";
 import SignUp from "./Sign-up";
 import { useDataContext } from "@/context/DataGlobal";
 import { useUserContext } from "@/context/UserContext";
-import SignOut from "@/firebase/fuctions/SignOut";
-import { Button } from "flowbite-react";
+import { LuMoon, LuSun } from "react-icons/lu";
+
+import Button  from "@/components/Buttons";
 export default function Nav() {
   const [theme, setTheme] = useState("light");
   const { data, setData } = useDataContext();
@@ -23,9 +23,9 @@ export default function Nav() {
   };
   const handleSingOut = () => {
     try {
-      setUsuario(null)
-      window.localStorage.removeItem("token")
-    /*   SignOut().then((response: any) => {
+      setUsuario(null);
+      window.localStorage.removeItem("token");
+      /*   SignOut().then((response: any) => {
         if (response === "1") {
           setData(null);
           setUsuario(null);
@@ -35,41 +35,21 @@ export default function Nav() {
   };
 
   return (
-    <nav className="bg-white border-gray-200 dark:bg-gray-900">
-      <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-        <h1 className="text-2xl font-bold uppercase dark:text-gray-300">Quien Gana?</h1>
-        {
-        usuario == null ? <p>Ingresa para poder votar</p> :  
-        
-        data && data != null && data.hasOwnProperty('enabled_to_vote') && new Date(data.enabled_to_vote) < new Date() || data !== null && !data.hasOwnProperty('enabled_to_vote' )  ? (
-          <div className="bg-green-600 text-white rounded-lg py-2 px-3 shadow-md">
-
-          <p >Hablitado para comprar</p>
-          </div>
-        ) : (
-          <div className="bg-red-600 text-white rounded-lg py-2 px-3 shadow-md">
-
-          <p >No Hablitado para comprar</p>
-          </div>
-        )}
-        <button
-          onClick={handleTheme}
-          className="text-gray-700 border  rounded-xl py-2 px-3 hover:bg-blue-200 ease-in-out transition-all dark:text-white"
-        >
-          Dark!
-        </button>
-        <PayPoint />
-       
-        <div className=" flex flex-col w-full md:block md:w-auto" id="navbar-default">
-          <ul className="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
+    <nav className="bg-gray-50 border-b-gray-500 border border-gray-200 dark:bg-slate-700 transition-all duration-300">
+      <div className="max-w-screen-xl justify-between flex px-4">
+        <h1 className="text-2xl font-bold dark:text-gray-300 my-auto">¿Quien Gana?</h1>
+        <div className=" flex md:block md:w-auto">
+          <ul className="font-medium flex p-4 space-x-5 rounded-lg ">
+            <button
+              onClick={handleTheme}
+              className="text-gray-700 dark:text-white rounded-full py-2 px-3 dark:hover:bg-blue-800 hover:bg-blue-200 ease-in-out transition-all"
+            >
+              {theme === "light" ? <LuMoon /> : <LuSun />}
+            </button>
             {usuario == null ? (
               <>
-                <li>
-                  <SignIn />
-                </li>
-                <li>
-                  <SignUp />
-                </li>
+                <SignIn />
+                <SignUp />
               </>
             ) : (
               <>
@@ -78,15 +58,15 @@ export default function Nav() {
                     Hola: {usuario.username}
                   </p>
                   <p className="text-gray-800 font-bold dark:text-white">
-                    {usuario.voto ? `ya votaste a ${usuario.candidado}`: 'no votaste'}
+                    {usuario.voto
+                      ? `ya votaste a ${usuario.candidado}`
+                      : "no votaste"}
                   </p>
                   <p className="text-gray-800 font-bold dark:text-white">
-                    {usuario.email} 
+                    {usuario.email}
                   </p>
                 </div>
-                <li>
-                  <Button onClick={handleSingOut}>Salir</Button>
-                </li>
+                  <Button className={'px-5 my-auto py-2 rounded-xl text-xs bg-red-500 text-white border-gray-500 hover:bg-red-400 transition-all ease-in-out'} onClick={handleSingOut}>Salir</Button>
               </>
             )}
           </ul>
