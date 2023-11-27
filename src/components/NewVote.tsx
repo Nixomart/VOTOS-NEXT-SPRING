@@ -38,7 +38,7 @@ export default function NewVote({ index, idCandidato }: any) {
     try {
       const data = { idCandidato: idCandidato };
       await axios
-        .post("http://192.168.0.5:8080/votacion/votar",data, {
+        .post("http://localhost:8080/votacion/votar",data, {
           headers: {
             Authorization: `Bearer ${usuario.token}`,
           },

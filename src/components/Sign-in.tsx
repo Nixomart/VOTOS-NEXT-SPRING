@@ -16,7 +16,7 @@ export default function SignIn() {
   const sumbitLogin = async () => {
     const data = { email, password };
     axios
-      .post("http://192.168.0.5:8080/auth/login", data)
+      .post("http://localhost:8080/auth/login", data)
       .then((response: any) => {
         if (response.data.message !== "sucess") {
           setErr("hubo un error en el inicio de sesion.");

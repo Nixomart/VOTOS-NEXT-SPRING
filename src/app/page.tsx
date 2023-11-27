@@ -49,7 +49,7 @@ fetchUser()
         
         if (usuario === null) {
           const response = await axios.get(
-            "http://192.168.0.5:8080/votacion/candidatos"
+            "http://localhost:8080/votacion/candidatos"
           );
           const data = response.data.payload;
           console.log(data);
@@ -60,7 +60,7 @@ fetchUser()
           console.log("ISUARIOO TOKEN: ", usuario.token);
           
           const response = await axios.get(
-            "http://192.168.0.5:8080/votacion/candidatosAuth",
+            "http://localhost:8080/votacion/candidatosAuth",
             {
               headers: {
                 Authorization: `Bearer ${usuario.token}`,
