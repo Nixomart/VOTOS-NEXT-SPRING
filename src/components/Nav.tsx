@@ -37,7 +37,7 @@ export default function Nav() {
   return (
     <nav className="bg-gray-50 border-b-gray-500 border border-gray-200 dark:bg-slate-700 transition-all duration-300">
       <div className="max-w-screen-xl justify-between flex px-4">
-        <h1 className="text-2xl font-bold dark:text-gray-300 my-auto">¿Quien Gana?</h1>
+        <h1 className="text-2xl font-bold dark:text-gray-300 my-auto">¿Quien Gana las elecciones?</h1>
         <div className=" flex md:block md:w-auto">
           <ul className="font-medium flex p-4 space-x-5 rounded-lg ">
             <button
